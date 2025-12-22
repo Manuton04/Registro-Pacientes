@@ -8,6 +8,11 @@ module org.registro.registro {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
+    requires com.google.gson;
+    opens org.registro.registro.classes to com.google.gson;
+
     opens org.registro.registro to javafx.fxml;
     exports org.registro.registro;
+
+    opens org.registro.registro.classes.Utils.adapters to com.google.gson;
 }

@@ -6,17 +6,17 @@ import java.util.UUID;
 
 public class Turno {
     private UUID id;
+    private UUID pacienteId;
     private LocalDateTime fecha;
     private ArrayList<String> descripcion;
     private String receta;
-    private Paciente paciente;
 
-    public Turno(LocalDateTime fecha, ArrayList<String> descripcion, String receta, Paciente paciente) {
+    public Turno(LocalDateTime fecha, ArrayList<String> descripcion, String receta, UUID pacienteId) {
         this.id = UUID.randomUUID();
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.receta = receta;
-        this.paciente = paciente;
+        this.pacienteId = pacienteId;
     }
 
     public UUID getId() {
@@ -40,10 +40,7 @@ public class Turno {
     public void setReceta(String receta) {
         this.receta = receta;
     }
-    public Paciente getPaciente() {
-        return paciente;
-    }
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public UUID getPacienteId() {
+        return pacienteId;
     }
 }

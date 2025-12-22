@@ -39,6 +39,14 @@ public class Paciente {
         this.numeroAfiliado = numeroAfiliado;
     }
 
+    public void addTurno(Turno turno) {
+        this.turnos.add(turno);
+    }
+
+    public void removeTurno(Turno turno) {
+        this.turnos.remove(turno);
+    }
+
     public UUID getId() {
         return id;
     }
