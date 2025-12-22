@@ -39,6 +39,25 @@ public class Paciente {
         this.numeroAfiliado = numeroAfiliado;
     }
 
+    public Paciente(UUID id, String nombre, String apellido, LocalDate fechaNacimiento, String localidad,
+                    String direccion, String telefono, String email, String dni,
+                    String obraSocial, String numeroAfiliado) {
+        this.id = id;
+        this.fechaRegistro = LocalDateTime.now();
+        this.turnos = new ArrayList<Turno>();
+
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.localidad = localidad;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.email = email;
+        this.dni = dni;
+        this.obraSocial = obraSocial;
+        this.numeroAfiliado = numeroAfiliado;
+    }
+
     public void addTurno(Turno turno) {
         this.turnos.add(turno);
     }
