@@ -22,7 +22,7 @@ public class HelloApplication extends Application {
         main();
     }
 
-    public void main() {
+    public void main() throws IOException {
         //Donde esta documentos
         Path path = Paths.get(
                 System.getProperty("user.home"),
@@ -31,13 +31,15 @@ public class HelloApplication extends Application {
                 "RegistroMedicoApp"
         );
         Sistema sistema = new Sistema(path);
-        sistema.addPaciente(crearPacientePrueba());
-        try {
-            sistema.saveAll();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        sistema.loadAll();
+        //sistema.addPaciente(crearPacientePrueba());
+        sistema.saveAll();
 
+
+        System.out.println("Pacientes cargados:");
+        for (Paciente p : sistema.getPacientes())
+            System.out.println("- " + p.getNombre());
+        System.out.println();
         //launch();
     }
 

@@ -8,26 +8,31 @@ import org.registro.registro.classes.Utils.adapters.LocalDateTimeAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class Sistema {
     private Map<UUID, Paciente> pacientes;
     private Path path;
-    Gson gson = new GsonBuilder()
+    private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
 
+    private Path pacientesPath;
+
     public Sistema(Path path){
         pacientes = new HashMap<>();
         this.path = path;
+        this.pacientesPath = path.resolve("pacientes");
     }
 
     public void addPaciente(Paciente paciente){
@@ -46,6 +51,11 @@ public class Sistema {
         paciente.removeTurno(turno);
     }
 
+    public void setPath(Path path) {
+        this.path = path;
+        this.pacientesPath = path.resolve("pacientes");
+    }
+
     public void saveAll() throws IOException{
         inicializarCarpeta();
         for (Paciente paciente : pacientes.values()) {
@@ -62,7 +72,19 @@ public class Sistema {
         }
     }
 
-    public void loadAll(){
+    public void loadAll() throws IOException{
+        if (!Files.exists(pacientesPath))
+            return;
+
+        this.pacientes = new HashMap<>();
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(pacientesPath, "*.json")) {
+            for (Path archivo : stream) {
+                String json = Files.readString(archivo);
+                Paciente p = gson.fromJson(json, Paciente.class);
+                this.addPaciente(p);
+            }
+        }
 
     }
 
@@ -70,7 +92,6 @@ public class Sistema {
         System.out.println("Base path: " + path.toAbsolutePath());
         System.out.println("Exists: " + Files.exists(path));
 
-        Path pacientesPath = path.resolve("pacientes");
         System.out.println("Pacientes path: " + pacientesPath.toAbsolutePath());
         
         if (!Files.exists(pacientesPath)) {
@@ -87,6 +108,10 @@ public class Sistema {
 
     public Paciente getPacienteFromTurno(Turno turno) {
         return pacientes.get(turno.getPacienteId());
+    }
+
+    public List<Paciente> getPacientes() {
+        return pacientes.values().stream().toList();
     }
 
 
