@@ -135,4 +135,14 @@ public class Paciente {
     public ArrayList<Turno> getTurnos() {
         return turnos;
     }
+
+    public int getEdad(){
+        LocalDate hoy = LocalDate.now();
+        int edad = hoy.getYear() - fechaNacimiento.getYear();
+        if (hoy.getMonthValue() < fechaNacimiento.getMonthValue() ||
+            (hoy.getMonthValue() == fechaNacimiento.getMonthValue() && hoy.getDayOfMonth() < fechaNacimiento.getDayOfMonth())) {
+            edad--;
+        }
+        return edad;
+    }
 }

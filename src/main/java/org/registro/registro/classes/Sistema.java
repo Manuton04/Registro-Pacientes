@@ -18,7 +18,6 @@ import java.util.UUID;
 
 public class Sistema {
     private Map<UUID, Paciente> pacientes;
-    private Map<UUID, Turno> turnos;
     private Path path;
     Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -28,7 +27,6 @@ public class Sistema {
 
     public Sistema(Path path){
         pacientes = new HashMap<>();
-        turnos = new HashMap<>();
         this.path = path;
     }
 
@@ -36,27 +34,26 @@ public class Sistema {
         pacientes.put(paciente.getId(), paciente);
     }
 
-    public void addTurno(Turno turno){
-        turnos.put(turno.getId(), turno);
+    public void addTurno(Paciente paciente, Turno turno){
+        paciente.addTurno(turno);
     }
 
     public void removePaciente(UUID id){
         pacientes.remove(id);
     }
 
-    public void removeTurno(UUID id){
-        turnos.remove(id);
+    public void removeTurno(Paciente paciente, Turno turno){
+        paciente.removeTurno(turno);
     }
 
     public void saveAll() throws IOException{
+        inicializarCarpeta();
         for (Paciente paciente : pacientes.values()) {
             savePaciente(paciente);
         }
     }
 
     public void savePaciente(Paciente paciente) throws IOException{
-        inicializarCarpeta();
-
         final Path pacientesPath = path.resolve("pacientes");
         Path filePath = pacientesPath.resolve(paciente.getId() + ".json");
 
@@ -75,8 +72,6 @@ public class Sistema {
 
         Path pacientesPath = path.resolve("pacientes");
         System.out.println("Pacientes path: " + pacientesPath.toAbsolutePath());
-
-
         
         if (!Files.exists(pacientesPath)) {
             Files.createDirectories(pacientesPath);
