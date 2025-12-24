@@ -1,8 +1,13 @@
 package org.registro.registro.classes;
 
+import org.registro.registro.classes.Utils.comparadores.ComparadorFechaTurno;
+import org.registro.registro.classes.Utils.comparadores.ComparadorTurno;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 public class Paciente {
@@ -60,6 +65,7 @@ public class Paciente {
 
     public void addTurno(Turno turno) {
         this.turnos.add(turno);
+        actualizarTurnos();
     }
 
     public void removeTurno(Turno turno) {
@@ -132,8 +138,18 @@ public class Paciente {
     public void setNumeroAfiliado(String numeroAfiliado) {
         this.numeroAfiliado = numeroAfiliado;
     }
+
     public ArrayList<Turno> getTurnos() {
+        actualizarTurnos();
         return turnos;
+    }
+
+    public Turno getLatestTurno(){
+        actualizarTurnos();
+        if (turnos.size() > 0)
+            return turnos.get(0);
+        else
+            return null;
     }
 
     public int getEdad(){
@@ -144,5 +160,10 @@ public class Paciente {
             edad--;
         }
         return edad;
+    }
+
+    private void actualizarTurnos(){
+        ComparadorTurno comparadorTurno = new ComparadorFechaTurno();
+        turnos.sort(comparadorTurno.reversed());
     }
 }

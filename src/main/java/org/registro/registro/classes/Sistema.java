@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.registro.registro.classes.Utils.adapters.LocalDateAdapter;
 import org.registro.registro.classes.Utils.adapters.LocalDateTimeAdapter;
+import org.registro.registro.classes.Utils.comparadores.Comparador;
+import org.registro.registro.classes.Utils.condiciones.Condicion;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Sistema {
     private Map<UUID, Paciente> pacientes;
@@ -112,6 +111,21 @@ public class Sistema {
 
     public List<Paciente> getPacientes() {
         return pacientes.values().stream().toList();
+    }
+
+    public List<Paciente> getPacientes(Condicion condicion){
+        List<Paciente> t = new ArrayList<>();
+        for(Paciente p : getPacientes()){
+            if(condicion.cumple(p))
+                t.add(p);
+        }
+        return t;
+    }
+    
+    public List<Paciente> getPacientes(Condicion condicion, Comparador comparador){
+        List<Paciente> t = getPacientes(condicion);
+        t.sort(comparador);
+        return t;
     }
 
 
