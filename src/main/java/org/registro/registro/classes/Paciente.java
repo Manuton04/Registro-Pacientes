@@ -5,10 +5,7 @@ import org.registro.registro.classes.Utils.comparadores.ComparadorTurno;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 public class Paciente {
     private UUID id;
@@ -162,8 +159,29 @@ public class Paciente {
         return edad;
     }
 
+    public Turno getTurnoProximo(){
+        LocalDateTime ahora = LocalDateTime.now();
+        for (Turno turno : turnos) {
+            if (turno.getFecha().isAfter(ahora)) {
+                return turno;
+            }
+        }
+        return null;
+    }
+
+    public List<Turno> getTurnosAfterToday(){
+        LocalDateTime ahora = LocalDateTime.now();
+        List<Turno> futurosTurnos = new ArrayList<>();
+        for (Turno turno : turnos) {
+            if (turno.getFecha().isAfter(ahora)) {
+                futurosTurnos.add(turno);
+            }
+        }
+        return futurosTurnos;
+    }
+
     private void actualizarTurnos(){
         ComparadorTurno comparadorTurno = new ComparadorFechaTurno();
-        turnos.sort(comparadorTurno.reversed());
+        turnos.sort(comparadorTurno);
     }
 }

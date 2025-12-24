@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7bc1f1bd-53ca-47a0-85ee-e680e1e86be7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/HelloController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Paciente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Paciente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Sistema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Sistema.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Utils/condiciones/CondicionAnd.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Utils/condiciones/CondicionAnd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Utils/condiciones/CondicionNot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Utils/condiciones/CondicionNot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Utils/condiciones/CondicionOr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/registro/registro/classes/Utils/condiciones/CondicionOr.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,16 +50,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

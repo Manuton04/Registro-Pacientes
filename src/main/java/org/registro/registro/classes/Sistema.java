@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 import org.registro.registro.classes.Utils.adapters.LocalDateAdapter;
 import org.registro.registro.classes.Utils.adapters.LocalDateTimeAdapter;
 import org.registro.registro.classes.Utils.comparadores.Comparador;
+import org.registro.registro.classes.Utils.comparadores.ComparadorTurnoFuturoPaciente;
 import org.registro.registro.classes.Utils.condiciones.Condicion;
+import org.registro.registro.classes.Utils.condiciones.CondicionTurnoFuturo;
 
 import java.io.File;
 import java.io.IOException;
@@ -121,11 +123,22 @@ public class Sistema {
         }
         return t;
     }
+
+    public List<Paciente> getPacientes(Comparador comparador){
+        List<Paciente> t = getPacientes();
+        t.sort(comparador);
+        return t;
+    }
     
     public List<Paciente> getPacientes(Condicion condicion, Comparador comparador){
         List<Paciente> t = getPacientes(condicion);
         t.sort(comparador);
         return t;
+    }
+
+    // Tambien ordena por fecha mas cercana
+    public List<Paciente> getPacientesWithTurnosAfterToday(){
+        return getPacientes(new CondicionTurnoFuturo(), new ComparadorTurnoFuturoPaciente());
     }
 
 
