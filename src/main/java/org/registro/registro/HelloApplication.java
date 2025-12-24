@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
 import org.registro.registro.classes.Turno;
+import org.registro.registro.classes.Utils.comparadores.Comparador;
+import org.registro.registro.classes.Utils.comparadores.ComparadorFechaTurno;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -41,6 +43,12 @@ public class HelloApplication extends Application {
             System.out.println("- " + p.getNombre());
         System.out.println();
         //launch();
+
+        Paciente p = sistema.getPacientes().getFirst();
+        int i = new ComparadorFechaTurno().compare(p.getTurnos().get(0), p.getTurnos().get(1));
+        System.out.println("Turno 1: "+ p.getTurnos().get(0).getFecha()+ " vs Turno 2: " + p.getTurnos().get(1).getFecha());
+        System.out.println(i);
+
     }
 
     public Paciente crearPacientePrueba(){
