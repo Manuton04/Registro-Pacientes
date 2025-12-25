@@ -9,6 +9,7 @@ module org.registro.registro {
     requires eu.hansolo.tilesfx;
 
     requires com.google.gson;
+    requires java.net.http;
     opens org.registro.registro.classes to com.google.gson;
 
     opens org.registro.registro to javafx.fxml;

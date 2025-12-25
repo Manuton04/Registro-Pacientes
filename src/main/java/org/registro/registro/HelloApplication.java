@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.registro.registro.TelegramIntegration;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
 import org.registro.registro.classes.Utils.condiciones.*;
@@ -16,17 +17,21 @@ import java.time.LocalDate;
 
 public class HelloApplication extends Application {
     public static Sistema sistema;
+    public static Path path = Paths.get(
+            System.getProperty("user.home"),
+            "OneDrive",
+            "Documentos",
+            "RegistroMedicoApp"
+    );
+
+    private static String WEBHOOK_URL = "https://hook.us1.make.com/xxxxxxxxxxxxx";
 
     @Override
     public void init() throws Exception {
-        Path path = Paths.get(
-                System.getProperty("user.home"),
-                "OneDrive",
-                "Documentos",
-                "RegistroMedicoApp"
-        );
         sistema = new Sistema(path);
         sistema.loadAll();
+        TelegramIntegration.initialize(sistema);
+
         //sistema.addPaciente(crearPacientePrueba());
         sistema.saveAll();
 
@@ -56,6 +61,11 @@ public class HelloApplication extends Application {
         stage.setTitle("Registro de Pacientes");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void stop() throws IOException {
+        sistema.saveAll();
+        TelegramIntegration.sendTurnosOnClose();
     }
 
     public static void main(String[] args) {

@@ -58,7 +58,7 @@ public class Sistema {
     }
 
     public void saveAll() throws IOException{
-        inicializarCarpeta();
+        ConfigHandler.inicializarCarpetaPacientes();
         for (Paciente paciente : pacientes.values()) {
             savePaciente(paciente);
         }
@@ -89,19 +89,7 @@ public class Sistema {
 
     }
 
-    public void inicializarCarpeta() throws IOException {
-        System.out.println("Base path: " + path.toAbsolutePath());
-        System.out.println("Exists: " + Files.exists(path));
 
-        System.out.println("Pacientes path: " + pacientesPath.toAbsolutePath());
-        
-        if (!Files.exists(pacientesPath)) {
-            Files.createDirectories(pacientesPath);
-            System.out.println("Created file pacientes!");
-        } else {
-            System.out.println("File pacientes already existed");
-        }
-    }
 
     public Paciente getById(UUID id) {
         return pacientes.get(id);
