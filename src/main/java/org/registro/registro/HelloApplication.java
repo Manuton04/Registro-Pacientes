@@ -91,11 +91,10 @@ public class HelloApplication extends Application {
         CondicionObraSocial o = new CondicionObraSocial(texto);
         CondicionDNI d = new CondicionDNI(texto);
         CondicionNumAfiliado a = new CondicionNumAfiliado(texto);
-        CondicionEdad edad;
+        CondicionEdad edad = null;
         try {
             edad = new CondicionEdad((Integer.parseInt(texto)));
         }catch (Exception ex){
-            return null;
         }
 
         CondicionOr cond = new CondicionOr(n, l);

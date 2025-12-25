@@ -39,6 +39,7 @@ public class HelloController {
     }
 
     public void refreshPatientList() {
+        patientList.getChildren().clear();
         List<Paciente> lista = new ArrayList<>(sistema.getPacientes());
         if (getText() != null && !getText().isEmpty()) {
             Condicion condicion = getCondicionBuscador(getText());
@@ -48,7 +49,7 @@ public class HelloController {
 
 
         for (Paciente p : lista) {
-            Button patientBtn = new Button(p.getNombre());
+            Button patientBtn = new Button(p.getNombre()+" "+p.getApellido());
             patientBtn.setMaxWidth(Double.MAX_VALUE);
             patientBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white;");
 

@@ -7,10 +7,10 @@ public class CondicionNombre implements Condicion{
     private String nombre;
 
     public CondicionNombre(String nombre){
-        this.nombre = nombre;
+        this.nombre = nombre.toLowerCase();
     }
 
     public boolean cumple(Paciente p) {
-        return p.getNombre().contains(nombre) || p.getApellido().contains(nombre);
+        return p.getNombre().toLowerCase().contains(nombre) || p.getApellido().toLowerCase().contains(nombre);
     }
 }
