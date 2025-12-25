@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import org.registro.registro.classes.ConfigHandler;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
 import org.registro.registro.classes.Utils.condiciones.Condicion;
@@ -12,11 +13,9 @@ import org.registro.registro.classes.Utils.condiciones.Condicion;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.registro.registro.HelloApplication.getCondicionBuscador;
-
 public class HelloController {
 
-    private static final Sistema sistema = HelloApplication.sistema;
+    private static final Sistema sistema = ConfigHandler.getSistema();
     @FXML
     private TextField buscador;
 
@@ -42,7 +41,7 @@ public class HelloController {
         patientList.getChildren().clear();
         List<Paciente> lista = new ArrayList<>(sistema.getPacientes());
         if (getText() != null && !getText().isEmpty()) {
-            Condicion condicion = getCondicionBuscador(getText());
+            Condicion condicion = ConfigHandler.getCondicionBuscador(getText());
             lista = sistema.getPacientes(condicion);
 
         }

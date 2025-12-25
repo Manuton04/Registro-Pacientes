@@ -21,19 +21,17 @@ import java.util.*;
 
 public class Sistema {
     private Map<UUID, Paciente> pacientes;
-    private Path path;
-    private Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
 
-    private Path pacientesPath;
-
-    public Sistema(Path path){
+    public Sistema(){
         pacientes = new HashMap<>();
-        this.path = path;
-        this.pacientesPath = path.resolve("pacientes");
+    }
+
+    public Map<UUID, Paciente> getHashMap(){
+        return pacientes;
+    }
+
+    public void setHashMap(Map<UUID, Paciente> map){
+        this.pacientes = map;
     }
 
     public void addPaciente(Paciente paciente){
@@ -51,45 +49,6 @@ public class Sistema {
     public void removeTurno(Paciente paciente, Turno turno){
         paciente.removeTurno(turno);
     }
-
-    public void setPath(Path path) {
-        this.path = path;
-        this.pacientesPath = path.resolve("pacientes");
-    }
-
-    public void saveAll() throws IOException{
-        ConfigHandler.inicializarCarpetaPacientes();
-        for (Paciente paciente : pacientes.values()) {
-            savePaciente(paciente);
-        }
-    }
-
-    public void savePaciente(Paciente paciente) throws IOException{
-        final Path pacientesPath = path.resolve("pacientes");
-        Path filePath = pacientesPath.resolve(paciente.getId() + ".json");
-
-        try (Writer writer = Files.newBufferedWriter(filePath)) {
-            gson.toJson(paciente, writer);
-        }
-    }
-
-    public void loadAll() throws IOException{
-        if (!Files.exists(pacientesPath))
-            return;
-
-        this.pacientes = new HashMap<>();
-
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(pacientesPath, "*.json")) {
-            for (Path archivo : stream) {
-                String json = Files.readString(archivo);
-                Paciente p = gson.fromJson(json, Paciente.class);
-                this.addPaciente(p);
-            }
-        }
-
-    }
-
-
 
     public Paciente getById(UUID id) {
         return pacientes.get(id);

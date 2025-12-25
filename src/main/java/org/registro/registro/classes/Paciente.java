@@ -1,5 +1,6 @@
 package org.registro.registro.classes;
 
+import org.registro.registro.TelegramIntegration;
 import org.registro.registro.classes.Utils.comparadores.ComparadorFechaTurno;
 import org.registro.registro.classes.Utils.comparadores.ComparadorTurno;
 
@@ -63,6 +64,7 @@ public class Paciente {
     public void addTurno(Turno turno) {
         this.turnos.add(turno);
         actualizarTurnos();
+        TelegramIntegration.onTurnoSaved();
     }
 
     public void removeTurno(Turno turno) {

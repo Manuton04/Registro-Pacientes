@@ -67,7 +67,7 @@ public class TelegramIntegration {
      * Add this button to your main view or settings.
      */
     public Button createSendTurnosButton() {
-        Button btn = new Button("📤 Enviar turnos de mañana");
+        Button btn = new Button("Enviar turnos de mañana");
         btn.setOnAction(e -> sendTurnosManually(btn));
         return btn;
     }
@@ -113,7 +113,7 @@ public class TelegramIntegration {
      * Call this after saving a new turno to automatically update Make.com.
      * This way Make.com always has the latest data.
      */
-    public void onTurnoSaved() {
+    public static void onTurnoSaved() {
         // Run in background to not block UI
         new Thread(() -> {
             webhookService.sendTomorrowsTurnosToMake();
