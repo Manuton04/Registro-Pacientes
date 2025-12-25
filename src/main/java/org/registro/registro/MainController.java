@@ -1,5 +1,7 @@
 package org.registro.registro;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -9,6 +11,7 @@ import org.registro.registro.classes.ConfigHandler;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
 import org.registro.registro.classes.Utils.condiciones.Condicion;
+import org.registro.registro.classes.Utils.telegram.MakeWebhookService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,8 @@ public class MainController {
 
     @FXML
     private VBox patientList;
+    @FXML
+    private Button btnEnviarTurnos;
 
     public String getText() {
         return buscador.getText();
@@ -58,5 +63,29 @@ public class MainController {
 
             patientList.getChildren().add(patientBtn);
         }
+    }
+
+    @FXML
+    private void onEnviarTurnos(ActionEvent event) {
+        btnEnviarTurnos.setDisable(true);
+        btnEnviarTurnos.setText("Enviando...");
+
+        new Thread(() -> {
+            MakeWebhookService service = new MakeWebhookService(
+                    ConfigHandler.getString("telegram.webhookUrl")
+            );
+            boolean success = service.sendTomorrowsTurnosToMake();
+
+            Platform.runLater(() -> {
+                btnEnviarTurnos.setDisable(false);
+                btnEnviarTurnos.setText("📤 Enviar turnos de mañana");
+
+                if (success) {
+                    System.out.println("✅ Turnos enviados!");
+                } else {
+                    System.out.println("❌ Error al enviar");
+                }
+            });
+        }).start();
     }
 }

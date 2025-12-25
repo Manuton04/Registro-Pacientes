@@ -1,60 +1,31 @@
 package org.registro.registro.classes.Utils.telegram;
 
-import com.google.gson.*;
+import com.google.gson.JsonObject;
+import org.registro.registro.classes.ConfigHandler;
+import org.registro.registro.classes.Paciente;
+import org.registro.registro.classes.Sistema;
+import org.registro.registro.classes.Turno;
+import org.registro.registro.classes.Utils.condiciones.CondicionFechaTurno;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
-import java.nio.file.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
-/**
- * Service that collects tomorrow's turnos and sends them to Make.com
- * for scheduled delivery to Telegram at 9 PM.
- *
- * Setup:
- * 1. Create a Make.com account (free)
- * 2. Create a new Scenario with Webhook trigger
- * 3. Copy the webhook URL and set it in WEBHOOK_URL
- * 4. Add a "Delay" module set to wait until 21:00
- * 5. Add a Telegram "Send Message" module
- */
 public class MakeWebhookService {
 
-    private final Path dataDirectory;
     private final String webhookUrl;
     private final HttpClient httpClient;
-    private final Gson gson;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    /**
-     * Creates a new MakeWebhookService.
-     *
-     * @param dataDirectoryPath Path to folder containing patient JSON files
-     * @param webhookUrl Your Make.com webhook URL
-     */
-    public MakeWebhookService(Path dataDirectoryPath, String webhookUrl) {
-        this.dataDirectory = dataDirectoryPath;
+    public MakeWebhookService(String webhookUrl) {
         this.webhookUrl = webhookUrl;
         this.httpClient = HttpClient.newHttpClient();
-
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
-                .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
-                .create();
     }
 
-    /**
-     * Scans all patient files, finds tomorrow's turnos, and sends to Make.com.
-     * Call this when the app closes or via a manual button.
-     *
-     * @return true if sent successfully
-     */
     public boolean sendTomorrowsTurnosToMake() {
         try {
             LocalDate tomorrow = LocalDate.now().plusDays(1);
@@ -77,72 +48,29 @@ public class MakeWebhookService {
         }
     }
 
-    /**
-     * Sends a test message to verify the webhook is working.
-     */
-    public boolean sendTestMessage() {
-        JsonObject payload = new JsonObject();
-        payload.addProperty("message", "🧪 <b>Mensaje de prueba</b>\n\nLa conexión con Make.com funciona correctamente!");
-        payload.addProperty("isTest", true);
-
-        return sendToWebhook(payload);
-    }
-
-    /**
-     * Gets all turnos for a specific date across all patient files.
-     */
-    private List<TurnoConPaciente> getTurnosForDate(LocalDate date) throws IOException {
+    private List<TurnoConPaciente> getTurnosForDate(LocalDate date) {
         List<TurnoConPaciente> turnosForDate = new ArrayList<>();
 
-        if (!Files.exists(dataDirectory)) {
-            System.err.println("Directorio de datos no existe: " + dataDirectory);
-            return turnosForDate;
-        }
+        Sistema sistema = ConfigHandler.getSistema();
 
-        try (var files = Files.list(dataDirectory)) {
-            List<Path> jsonFiles = files
-                    .filter(path -> path.toString().endsWith(".json"))
-                    .collect(Collectors.toList());
+        // Use CondicionFechaTurno to filter patients with turnos on that date
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(23, 59, 59);
+        CondicionFechaTurno condicion = new CondicionFechaTurno(startOfDay, endOfDay);
 
-            for (Path file : jsonFiles) {
-                try {
-                    String content = Files.readString(file);
-                    JsonObject patientJson = JsonParser.parseString(content).getAsJsonObject();
+        List<Paciente> pacientes = sistema.getPacientes(condicion);
 
-                    // Get patient name
-                    String nombre = getStringOrEmpty(patientJson, "nombre");
-                    String apellido = getStringOrEmpty(patientJson, "apellido");
-                    String nombreCompleto = (nombre + " " + apellido).trim();
+        for (Paciente paciente : pacientes) {
+            String nombreCompleto = paciente.getNombre() + " " + paciente.getApellido();
 
-                    if (nombreCompleto.isEmpty()) {
-                        nombreCompleto = "Paciente sin nombre";
-                    }
-
-                    // Get turnos array
-                    if (patientJson.has("turnos") && patientJson.get("turnos").isJsonArray()) {
-                        JsonArray turnosArray = patientJson.getAsJsonArray("turnos");
-
-                        for (JsonElement turnoElement : turnosArray) {
-                            JsonObject turnoObj = turnoElement.getAsJsonObject();
-
-                            if (turnoObj.has("fecha")) {
-                                String fechaStr = turnoObj.get("fecha").getAsString();
-                                LocalDateTime fechaTurno = LocalDateTime.parse(fechaStr);
-
-                                if (fechaTurno.toLocalDate().equals(date)) {
-                                    TurnoConPaciente tcp = new TurnoConPaciente();
-                                    tcp.pacienteNombre = nombreCompleto;
-                                    tcp.fecha = fechaTurno;
-                                    tcp.hora = fechaTurno.format(TIME_FORMATTER);
-                                    tcp.descripcion = extractDescripcion(turnoObj);
-                                    turnosForDate.add(tcp);
-                                }
-                            }
-                        }
-                    }
-
-                } catch (Exception e) {
-                    System.err.println("Error procesando archivo: " + file.getFileName() + " - " + e.getMessage());
+            for (Turno turno : paciente.getTurnos()) {
+                if (turno.getFecha().toLocalDate().equals(date)) {
+                    TurnoConPaciente tcp = new TurnoConPaciente();
+                    tcp.pacienteNombre = nombreCompleto;
+                    tcp.fecha = turno.getFecha();
+                    tcp.hora = turno.getFecha().format(TIME_FORMATTER);
+                    tcp.descripcion = String.join(", ", turno.getDescripcion());
+                    turnosForDate.add(tcp);
                 }
             }
         }
@@ -153,30 +81,6 @@ public class MakeWebhookService {
         return turnosForDate;
     }
 
-    private String getStringOrEmpty(JsonObject obj, String field) {
-        if (obj.has(field) && !obj.get(field).isJsonNull()) {
-            return obj.get(field).getAsString();
-        }
-        return "";
-    }
-
-    private String extractDescripcion(JsonObject turno) {
-        if (!turno.has("descripcion")) return "Sin descripción";
-
-        JsonElement desc = turno.get("descripcion");
-        if (desc.isJsonArray()) {
-            List<String> items = new ArrayList<>();
-            for (JsonElement e : desc.getAsJsonArray()) {
-                items.add(e.getAsString());
-            }
-            return items.isEmpty() ? "Sin descripción" : String.join(", ", items);
-        }
-        return desc.getAsString();
-    }
-
-    /**
-     * Formats the message for Telegram (HTML format).
-     */
     private String formatTurnosMessage(List<TurnoConPaciente> turnos, LocalDate date) {
         StringBuilder message = new StringBuilder();
 
@@ -203,9 +107,6 @@ public class MakeWebhookService {
         return message.toString();
     }
 
-    /**
-     * Sends the payload to Make.com webhook.
-     */
     private boolean sendToWebhook(JsonObject payload) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -217,54 +118,30 @@ public class MakeWebhookService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println("✅ Datos enviados a Make.com exitosamente");
+                System.out.println("✅ Turnos enviados a Make.com");
                 return true;
             } else {
-                System.err.println("❌ Error al enviar a Make.com. Código: " + response.statusCode());
-                System.err.println("Respuesta: " + response.body());
+                System.err.println("❌ Error. Código: " + response.statusCode());
                 return false;
             }
 
         } catch (Exception e) {
-            System.err.println("Error de conexión con Make.com: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error de conexión: " + e.getMessage());
             return false;
         }
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // Helper classes
-    // ─────────────────────────────────────────────────────────────
+    public boolean sendTestMessage() {
+        JsonObject payload = new JsonObject();
+        payload.addProperty("message", "🧪 <b>Test</b>\n\nConexión exitosa!");
+        payload.addProperty("isTest", true);
+        return sendToWebhook(payload);
+    }
 
-    /**
-     * Internal class to hold turno info with patient name.
-     */
     private static class TurnoConPaciente {
         String pacienteNombre;
         LocalDateTime fecha;
         String hora;
         String descripcion;
-    }
-
-    /**
-     * Gson adapter for LocalDateTime.
-     */
-    private static class LocalDateTimeDeserializer implements JsonDeserializer<LocalDateTime> {
-        @Override
-        public LocalDateTime deserialize(JsonElement json, java.lang.reflect.Type type,
-                                         JsonDeserializationContext context) throws JsonParseException {
-            return LocalDateTime.parse(json.getAsString());
-        }
-    }
-
-    /**
-     * Gson adapter for LocalDate.
-     */
-    private static class LocalDateDeserializer implements JsonDeserializer<LocalDate> {
-        @Override
-        public LocalDate deserialize(JsonElement json, java.lang.reflect.Type type,
-                                     JsonDeserializationContext context) throws JsonParseException {
-            return LocalDate.parse(json.getAsString());
-        }
     }
 }

@@ -27,7 +27,7 @@ public class TelegramIntegration {
      * Initialize the service (call this in your App or Controller init)
      */
     public static void initialize() {
-        webhookService = new MakeWebhookService(DATA_DIRECTORY, WEBHOOK_URL);
+        webhookService = new MakeWebhookService(WEBHOOK_URL);
     }
 
     // ─────────────────────────────────────────────────────────────────

@@ -32,6 +32,10 @@
         <StackPane style="-fx-background-color: #ecf0f1;">
             <Label text="Selecciona un paciente"/>
         </StackPane>
+        <Button fx:id="btnEnviarTurnos"
+                text="📤 Enviar turnos de mañana"
+                onAction="#onEnviarTurnos"
+                maxWidth="Infinity" />
     </center>
 
 </BorderPane>

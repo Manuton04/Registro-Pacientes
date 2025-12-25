@@ -40,7 +40,7 @@ public class MainApplication extends Application {
             System.out.println("- " + p.getNombre());
         System.out.println();
 
-        testWebhook();
+        //testWebhookSimple();
 
         /*
         Paciente julio = sistema.getPacientes(new CondicionNombre("Julio")).get(0);
@@ -111,25 +111,21 @@ public class MainApplication extends Application {
         return p;
     }
 
-    public static void testWebhook() {
+    public static void testWebhookSimple() {
         try {
             String webhookUrl = ConfigHandler.getString("telegram.webhookUrl");
-            System.out.println("Webhook URL: " + webhookUrl);
 
-            // Simple HTTP test
             HttpClient client = HttpClient.newHttpClient();
-            String testJson = "{\"message\": \"Test from Java\", \"turnoCount\": 1}";
+            String json = "{\"message\": \"Hola desde Java!\", \"turnoCount\": 5}";
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(webhookUrl))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(testJson))
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             System.out.println("Status: " + response.statusCode());
-            System.out.println("Response: " + response.body());
 
         } catch (Exception e) {
             e.printStackTrace();
