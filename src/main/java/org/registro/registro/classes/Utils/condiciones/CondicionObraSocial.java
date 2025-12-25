@@ -6,10 +6,10 @@ public class CondicionObraSocial implements Condicion{
     private String obraSocial;
 
     public CondicionObraSocial(String obraSocial){
-        this.obraSocial = obraSocial;
+        this.obraSocial = obraSocial.toLowerCase();
     }
 
     public boolean cumple(Paciente paciente){
-        return paciente.getObraSocial().contains(obraSocial);
+        return paciente.getObraSocial().toLowerCase().contains(obraSocial);
     }
 }

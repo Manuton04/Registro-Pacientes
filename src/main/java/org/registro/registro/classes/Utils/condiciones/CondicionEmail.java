@@ -6,10 +6,10 @@ public class CondicionEmail implements Condicion{
     private String email;
 
     public CondicionEmail(String email){
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     public boolean cumple(Paciente p){
-        return p.getEmail().contains(email);
+        return p.getEmail().toLowerCase().contains(email);
     }
 }

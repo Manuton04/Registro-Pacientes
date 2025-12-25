@@ -13,7 +13,7 @@ import org.registro.registro.classes.Utils.condiciones.Condicion;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HelloController {
+public class MainController {
 
     private static final Sistema sistema = ConfigHandler.getSistema();
     @FXML

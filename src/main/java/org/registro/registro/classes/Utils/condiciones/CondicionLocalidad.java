@@ -6,10 +6,10 @@ public class CondicionLocalidad implements Condicion{
     private String localidad;
 
     public CondicionLocalidad(String localidad) {
-        this.localidad = localidad;
+        this.localidad = localidad.toLowerCase();
     }
 
     public boolean cumple(Paciente p) {
-        return p.getLocalidad().contains(localidad);
+        return p.getLocalidad().toLowerCase().contains(localidad);
     }
 }

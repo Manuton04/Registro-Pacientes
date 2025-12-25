@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.registro.registro.HelloController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.registro.registro.MainController">
 
     <!-- Sidebar -->
     <left>

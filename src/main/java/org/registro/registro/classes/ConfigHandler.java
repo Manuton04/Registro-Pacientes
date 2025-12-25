@@ -6,7 +6,9 @@ import org.registro.registro.classes.Utils.adapters.LocalDateAdapter;
 import org.registro.registro.classes.Utils.adapters.LocalDateTimeAdapter;
 import org.registro.registro.classes.Utils.condiciones.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -17,12 +19,12 @@ import java.time.LocalTime;
 
 public class ConfigHandler {
     private static  Sistema sistema;
-    private static Path path = Path.of(System.getProperty("user.home"),
-            "OneDrive", "Documentos", "RegistroMedicoApp");
+    private static Path path;
     private static String webhookUrl;
     private static String chatId;
     public static LocalTime webhookTime;
     private static Path pacientesPath;
+    private static Path configPath;
 
 
     public static Gson gson = new GsonBuilder()
@@ -32,11 +34,17 @@ public class ConfigHandler {
             .create();
 
     public static void loadConfig() throws IOException {
+        path = getAppDataPath();
         inicializarCarpeta();
         pacientesPath = path.resolve("pacientes");
         inicializarCarpetaPacientes();
         sistema = new Sistema();
         loadAll(sistema);
+
+        configPath = path.resolve("config.json");
+        crearCarpetConfig();
+
+
 
     }
 
@@ -51,8 +59,15 @@ public class ConfigHandler {
             System.out.println("¡La carpeta principal ya existia!");
         }
 
+    }
 
-
+    public static void crearCarpetConfig() throws IOException {
+        if (!Files.exists(configPath)) {
+            try (InputStream is = ConfigHandler.class.getResourceAsStream("/org/registro/registro/config.json")) {
+                Files.createDirectories(configPath.getParent());
+                Files.copy(is, configPath);
+            }
+        }
     }
 
     public static void inicializarCarpetaPacientes() throws IOException {
@@ -168,6 +183,22 @@ public class ConfigHandler {
             cond = new CondicionOr(cond, edad);
 
         return cond;
+    }
+
+    public static Path getAppDataPath() {
+        String os = System.getProperty("os.name").toLowerCase();
+        String userHome = System.getProperty("user.home");
+
+        if (os.contains("win")) {
+            // Windows AppData
+            String appData = System.getenv("LOCALAPPDATA");  // C:\Users\manut\AppData\Local
+            if (appData != null) {
+                return Path.of(appData, "RegistroMedicoApp");
+            }
+        }
+
+        // Mac/Linux - use hidden folder in home
+        return Path.of(userHome, "RegistroMedicoApp");
     }
 
 }

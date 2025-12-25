@@ -5,25 +5,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.registro.registro.TelegramIntegration;
 import org.registro.registro.classes.ConfigHandler;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
-import org.registro.registro.classes.Utils.condiciones.*;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 
-public class HelloApplication extends Application {
+public class MainApplication extends Application {
     private Sistema sistema = new Sistema();
 
     @Override
     public void init() throws Exception {
         ConfigHandler.loadConfig();
         sistema = ConfigHandler.getSistema();
-        TelegramIntegration.initialize();
+        org.registro.registro.TelegramIntegration.initialize();
 
         //sistema.addPaciente(crearPacientePrueba());
 
