@@ -30,7 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HelloApplication extends Application {
-    private Sistema sistema;
+    public static Sistema sistema;
+    public static VBox patientList;
     @Override
     public void start(Stage stage) throws IOException {
         //main();
@@ -40,8 +41,8 @@ public class HelloApplication extends Application {
         sidebar.setPrefWidth(250);
         sidebar.setStyle("-fx-background-color: #2c3e50;");
 
-        TextField searchBar = new TextField();
-        searchBar.setPromptText("Buscar paciente...");
+        TextField buscador = new TextField();
+        buscador.setPromptText("Buscar paciente...");
 
         Button btnAgregar = new Button("Agregar Paciente");
         Button btnTurnos = new Button("Turnos");
@@ -49,7 +50,7 @@ public class HelloApplication extends Application {
         btnAgregar.setMaxWidth(Double.MAX_VALUE);
         btnTurnos.setMaxWidth(Double.MAX_VALUE);
 
-        VBox patientList = new VBox(5);
+        patientList = new VBox(5);
         patientList.setPadding(new Insets(5));
 
         ScrollPane scrollPane = new ScrollPane(patientList);
@@ -57,26 +58,9 @@ public class HelloApplication extends Application {
         scrollPane.setStyle("-fx-background: #34495e;");
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        List<Paciente> lista = new ArrayList<>(sistema.getPacientes());
-        if (getCondicionBuscador(searchBar.getText()) != null) {
-            Condicion condicion = getCondicionBuscador(searchBar.getText());
-            lista = sistema.getPacientes(condicion);
-        }
+        HelloController.refreshPatientList();
 
-
-        for (Paciente p : lista) {
-            Button patientBtn = new Button(p.getNombre());
-            patientBtn.setMaxWidth(Double.MAX_VALUE);
-            patientBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white;");
-
-            patientBtn.setOnAction(e -> {
-                System.out.println("Selected: " + p.getNombre());
-            });
-
-            patientList.getChildren().add(patientBtn);
-        }
-
-        sidebar.getChildren().addAll(btnAgregar, searchBar, scrollPane);
+        sidebar.getChildren().addAll(btnAgregar, buscador, scrollPane);
 
         StackPane content = new StackPane();
         content.setStyle("-fx-background-color: #ecf0f1;");
@@ -122,16 +106,26 @@ public class HelloApplication extends Application {
     }
 
     public Paciente crearPacientePrueba(){
-        LocalDate fechaNacimiento = LocalDate.of(1969, 5, 17);
-        Paciente p = new Paciente("Mercedes", "de Piro", fechaNacimiento, "Comandante Nicanor Otamendi", "Direccion", "Num telefono", "Email", "Documento", "Obra social", "Num afiliado");
-        Turno t = new Turno(LocalDateTime.now().plusDays(7), new ArrayList<String>(Arrays.asList("Consulta general", "Dolor de cabeza")), "Paracetamol 500mg cada 8 horas", p.getId());
-        Turno t2 = new Turno(LocalDateTime.now().plusDays(30), new ArrayList<String>(Arrays.asList("Control general")), "Ninguna", p.getId());
-        p.addTurno(t);
-        p.addTurno(t2);
+        String nombre = "Julio";
+        String apellido = "Rodriguez";
+        LocalDate fechaNacimiento = LocalDate.of(1960, 7, 13);
+        String localidad = "Miramar";
+        String direccion = "Calle Falsa 123";
+        String numTelefono = "123456789";
+        String email = "juliorod60@gmail.com";
+        String dni = "20123456";
+        String obraSocial = "OSDE";
+        String numAfiliado = "87654321";
+
+        Paciente p = new Paciente(nombre, apellido, fechaNacimiento, localidad, direccion, numTelefono, email, dni, obraSocial, numAfiliado);
+        //Turno t = new Turno(LocalDateTime.now().plusDays(7), new ArrayList<String>(Arrays.asList("Consulta general", "Dolor de cabeza")), "Paracetamol 500mg cada 8 horas", p.getId());
+        //Turno t2 = new Turno(LocalDateTime.now().plusDays(30), new ArrayList<String>(Arrays.asList("Control general")), "Ninguna", p.getId());
+        //p.addTurno(t);
+        //p.addTurno(t2);
         return p;
     }
 
-    public Condicion getCondicionBuscador(String texto){
+    public static Condicion getCondicionBuscador(String texto){
         if (texto == null || texto.isEmpty())
             return null;
         Condicion n = new CondicionNombre(texto);
