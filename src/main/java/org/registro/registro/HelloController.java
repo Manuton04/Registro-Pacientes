@@ -3,7 +3,8 @@ package org.registro.registro;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
 import org.registro.registro.classes.Utils.condiciones.Condicion;
@@ -14,23 +15,34 @@ import java.util.List;
 import static org.registro.registro.HelloApplication.getCondicionBuscador;
 
 public class HelloController {
-    private static Sistema sistema =  HelloApplication.sistema;
+
+    private static final Sistema sistema = HelloApplication.sistema;
     @FXML
-    private static TextField buscador;
+    private TextField buscador;
 
     @FXML
-    public static String getText() {
-        if (buscador != null) {
-            return buscador.getText();
-        }
-        return "";
+    private VBox patientList;
+
+    public String getText() {
+        return buscador.getText();
     }
 
-    public static void refreshPatientList() {
+    @FXML
+    public void initialize() {
+        refreshPatientList();
+    }
+
+    @FXML
+    private void onSearch(KeyEvent event) {
+        System.out.println("Searching: " + buscador.getText());
+        refreshPatientList();
+    }
+
+    public void refreshPatientList() {
         List<Paciente> lista = new ArrayList<>(sistema.getPacientes());
         if (getText() != null && !getText().isEmpty()) {
-                Condicion condicion = getCondicionBuscador(getText());
-                lista = sistema.getPacientes(condicion);
+            Condicion condicion = getCondicionBuscador(getText());
+            lista = sistema.getPacientes(condicion);
 
         }
 
@@ -44,12 +56,7 @@ public class HelloController {
                 System.out.println("Selected: " + p.getNombre());
             });
 
-            HelloApplication.patientList.getChildren().add(patientBtn);
+            patientList.getChildren().add(patientBtn);
         }
-    }
-
-    public void onSearch(InputMethodEvent eText) {
-        System.out.println("Searching for: " + getText());
-        refreshPatientList();
     }
 }

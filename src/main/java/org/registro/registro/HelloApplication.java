@@ -2,96 +2,38 @@ package org.registro.registro;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
-import org.registro.registro.classes.Turno;
-import org.registro.registro.classes.Utils.comparadores.Comparador;
-import org.registro.registro.classes.Utils.comparadores.ComparadorFechaTurno;
 import org.registro.registro.classes.Utils.condiciones.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class HelloApplication extends Application {
     public static Sistema sistema;
-    public static VBox patientList;
+
     @Override
-    public void start(Stage stage) throws IOException {
-        //main();
-
-        VBox sidebar = new VBox(10);
-        sidebar.setPadding(new Insets(10));
-        sidebar.setPrefWidth(250);
-        sidebar.setStyle("-fx-background-color: #2c3e50;");
-
-        TextField buscador = new TextField();
-        buscador.setPromptText("Buscar paciente...");
-
-        Button btnAgregar = new Button("Agregar Paciente");
-        Button btnTurnos = new Button("Turnos");
-
-        btnAgregar.setMaxWidth(Double.MAX_VALUE);
-        btnTurnos.setMaxWidth(Double.MAX_VALUE);
-
-        patientList = new VBox(5);
-        patientList.setPadding(new Insets(5));
-
-        ScrollPane scrollPane = new ScrollPane(patientList);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background: #34495e;");
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
-
-        HelloController.refreshPatientList();
-
-        sidebar.getChildren().addAll(btnAgregar, buscador, scrollPane);
-
-        StackPane content = new StackPane();
-        content.setStyle("-fx-background-color: #ecf0f1;");
-        BorderPane root = new BorderPane();
-        root.setLeft(sidebar);
-        root.setCenter(content);
-
-        Scene scene = new Scene(root, 1000, 600);
-        stage.setTitle("Registro de Pacientes");
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
-    public void init() throws IOException {
-        //launch();
-        //Donde esta documentos
+    public void init() throws Exception {
         Path path = Paths.get(
                 System.getProperty("user.home"),
                 "OneDrive",
                 "Documentos",
                 "RegistroMedicoApp"
         );
-        this.sistema = new Sistema(path);
+        sistema = new Sistema(path);
         sistema.loadAll();
         //sistema.addPaciente(crearPacientePrueba());
         sistema.saveAll();
 
 
         System.out.println("Pacientes cargados:");
-        for (Paciente p : sistema.getPacientes())
+        for (
+                Paciente p : sistema.getPacientes())
             System.out.println("- " + p.getNombre());
         System.out.println();
 
@@ -103,6 +45,21 @@ public class HelloApplication extends Application {
         System.out.println(i);
          */
 
+    }
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root, 1000, 600);
+        stage.setTitle("Registro de Pacientes");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
     public Paciente crearPacientePrueba(){
