@@ -8,9 +8,20 @@ import javafx.stage.Stage;
 import org.registro.registro.classes.ConfigHandler;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
+import org.registro.registro.classes.Turno;
+import org.registro.registro.classes.Utils.condiciones.CondicionNombre;
+import org.registro.registro.classes.Utils.telegram.TelegramIntegration;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainApplication extends Application {
     private Sistema sistema = new Sistema();
@@ -19,7 +30,7 @@ public class MainApplication extends Application {
     public void init() throws Exception {
         ConfigHandler.loadConfig();
         sistema = ConfigHandler.getSistema();
-        org.registro.registro.TelegramIntegration.initialize();
+        TelegramIntegration.initialize();
 
         //sistema.addPaciente(crearPacientePrueba());
 
@@ -28,6 +39,29 @@ public class MainApplication extends Application {
                 Paciente p : sistema.getPacientes())
             System.out.println("- " + p.getNombre());
         System.out.println();
+
+        testWebhook();
+
+        /*
+        Paciente julio = sistema.getPacientes(new CondicionNombre("Julio")).get(0);
+       julio.addTurno(new Turno(
+                LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(9, 0)),
+                new ArrayList<>(List.of("Control general", "Chequeo anual")),
+                "Ninguna", julio.getId()
+        ));
+
+        julio.addTurno(new Turno(
+                LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(11, 30)),
+                new ArrayList<>(List.of("Dolor de rodilla")),
+                "Ninguna", julio.getId()
+        ));
+
+        julio.addTurno(new Turno(
+                LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(14, 30)),
+                new ArrayList<>(List.of("Dolor de Espalda" )),
+                "Ninguna", julio.getId()
+        ));
+        */
 
         /*
         Paciente p = sistema.getPacientes().getFirst();
@@ -75,5 +109,30 @@ public class MainApplication extends Application {
         //p.addTurno(t);
         //p.addTurno(t2);
         return p;
+    }
+
+    public static void testWebhook() {
+        try {
+            String webhookUrl = ConfigHandler.getString("telegram.webhookUrl");
+            System.out.println("Webhook URL: " + webhookUrl);
+
+            // Simple HTTP test
+            HttpClient client = HttpClient.newHttpClient();
+            String testJson = "{\"message\": \"Test from Java\", \"turnoCount\": 1}";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(webhookUrl))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(testJson))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Response: " + response.body());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

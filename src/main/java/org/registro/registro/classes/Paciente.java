@@ -1,8 +1,8 @@
 package org.registro.registro.classes;
 
-import org.registro.registro.TelegramIntegration;
 import org.registro.registro.classes.Utils.comparadores.ComparadorFechaTurno;
 import org.registro.registro.classes.Utils.comparadores.ComparadorTurno;
+import org.registro.registro.classes.Utils.telegram.TelegramIntegration;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

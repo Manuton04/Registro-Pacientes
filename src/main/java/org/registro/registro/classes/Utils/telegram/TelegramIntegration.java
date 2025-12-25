@@ -1,17 +1,13 @@
-package org.registro.registro;
+package org.registro.registro.classes.Utils.telegram;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import org.registro.registro.services.MakeWebhookService;
+import org.registro.registro.classes.ConfigHandler;
 
-/**
- * Example code showing how to integrate MakeWebhookService
- * into your existing RegistroPacientesApp.
- *
- * Copy the relevant parts into your controllers.
- */
+import java.nio.file.Path;
+
 public class TelegramIntegration {
 
     // ════════════════════════════════════════════════════════════════
@@ -19,11 +15,9 @@ public class TelegramIntegration {
     // ════════════════════════════════════════════════════════════════
 
     // Your Make.com webhook URL (get this from Make.com scenario)
-    private static final String WEBHOOK_URL = "https://hook.us1.make.com/xxxxxxxxxxxxx";
+    private static final String WEBHOOK_URL = ConfigHandler.getWebhookUrl();
 
-    // Path to your patient JSON files (adjust to your OneDrive path)
-    private static final String DATA_DIRECTORY =
-            System.getProperty("user.home") + "/OneDrive/Documentos/RegistroMedicoApp/Patients";
+    private static final Path DATA_DIRECTORY = ConfigHandler.getPacientesPath();
 
     // ════════════════════════════════════════════════════════════════
 
@@ -85,7 +79,7 @@ public class TelegramIntegration {
 
         task.setOnSucceeded(e -> {
             button.setDisable(false);
-            button.setText("📤 Enviar turnos de mañana");
+            button.setText("Enviar turnos de mañana");
 
             if (task.getValue()) {
                 showAlert(Alert.AlertType.INFORMATION, "Éxito",
@@ -98,7 +92,7 @@ public class TelegramIntegration {
 
         task.setOnFailed(e -> {
             button.setDisable(false);
-            button.setText("📤 Enviar turnos de mañana");
+            button.setText("Enviar turnos de mañana");
             showAlert(Alert.AlertType.ERROR, "Error", "Error: " + task.getException().getMessage());
         });
 

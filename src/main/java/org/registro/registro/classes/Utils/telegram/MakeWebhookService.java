@@ -1,8 +1,6 @@
-package org.registro.registro.services;
+package org.registro.registro.classes.Utils.telegram;
 
 import com.google.gson.*;
-import org.registro.registro.classes.Paciente;
-import org.registro.registro.classes.Turno;
 
 import java.io.IOException;
 import java.net.URI;
@@ -40,8 +38,8 @@ public class MakeWebhookService {
      * @param dataDirectoryPath Path to folder containing patient JSON files
      * @param webhookUrl Your Make.com webhook URL
      */
-    public MakeWebhookService(String dataDirectoryPath, String webhookUrl) {
-        this.dataDirectory = Paths.get(dataDirectoryPath);
+    public MakeWebhookService(Path dataDirectoryPath, String webhookUrl) {
+        this.dataDirectory = dataDirectoryPath;
         this.webhookUrl = webhookUrl;
         this.httpClient = HttpClient.newHttpClient();
 

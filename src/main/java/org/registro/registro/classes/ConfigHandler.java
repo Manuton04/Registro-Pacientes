@@ -2,6 +2,8 @@ package org.registro.registro.classes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.registro.registro.classes.Utils.adapters.LocalDateAdapter;
 import org.registro.registro.classes.Utils.adapters.LocalDateTimeAdapter;
 import org.registro.registro.classes.Utils.condiciones.*;
@@ -25,6 +27,7 @@ public class ConfigHandler {
     public static LocalTime webhookTime;
     private static Path pacientesPath;
     private static Path configPath;
+    private static JsonObject  configJson;
 
 
     public static Gson gson = new GsonBuilder()
@@ -44,6 +47,12 @@ public class ConfigHandler {
         configPath = path.resolve("config.json");
         crearCarpetConfig();
 
+        String json = Files.readString(configPath);
+        configJson = JsonParser.parseString(json).getAsJsonObject();
+
+        webhookUrl = getString("telegram.webhookUrl");
+        chatId = getString("telegram.chatId");
+        webhookTime = LocalTime.of(getInt("app.notificationHour"), getInt("app.notificationMinute"));
 
 
     }
@@ -119,36 +128,43 @@ public class ConfigHandler {
         return path.resolve("pacientes");
     }
 
-    public static void setPath(Path newPath) {
-        path = newPath;
-    }
-
     public static String getWebhookUrl() {
         return webhookUrl;
     }
 
-    public static void setWebhookUrl(String webhookUrl) {
+    public static void setWebhookUrl(String webhookUrl) throws IOException {
         ConfigHandler.webhookUrl = webhookUrl;
+        ConfigHandler.setString("telegram.webhookUrl", webhookUrl);
+        ConfigHandler.saveConfig();
     }
 
     public static String getChatId() {
         return chatId;
     }
 
-    public static void setChatId(String chatId) {
+    public static void setChatId(String chatId) throws IOException {
         ConfigHandler.chatId = chatId;
+        ConfigHandler.setString("telegram.chatId", chatId);
+        ConfigHandler.saveConfig();
     }
 
     public static LocalTime getWebhookTime() {
         return webhookTime;
     }
 
-    public static void setWebhookTime(LocalTime webhookTime) {
+    public static void setWebhookTime(LocalTime webhookTime) throws IOException {
         ConfigHandler.webhookTime = webhookTime;
+        ConfigHandler.setString("app.notificationHour", String.valueOf(webhookTime.getHour()));
+        ConfigHandler.setString("app.notificationMinute", String.valueOf(webhookTime.getMinute()));
+        ConfigHandler.saveConfig();
+
     }
 
-    public static void setWebhookTime(int hour, int minute) {
+    public static void setWebhookTime(int hour, int minute) throws IOException {
         ConfigHandler.webhookTime = LocalTime.of(hour, minute);
+        ConfigHandler.setString("app.notificationHour", String.valueOf(hour));
+        ConfigHandler.setString("app.notificationMinute", String.valueOf(minute));
+        ConfigHandler.saveConfig();
     }
 
     public static Gson getGson() {
@@ -199,6 +215,56 @@ public class ConfigHandler {
 
         // Mac/Linux - use hidden folder in home
         return Path.of(userHome, "RegistroMedicoApp");
+    }
+
+    public static String getString(String path) {
+        String[] keys = path.split("\\.");
+        JsonObject current = configJson;
+
+        for (int i = 0; i < keys.length - 1; i++) {
+            current = current.getAsJsonObject(keys[i]);
+        }
+
+        return current.get(keys[keys.length - 1]).getAsString();
+    }
+
+    public static int getInt(String path) {
+        String[] keys = path.split("\\.");
+        JsonObject current = configJson;
+
+        for (int i = 0; i < keys.length - 1; i++) {
+            current = current.getAsJsonObject(keys[i]);
+        }
+
+        return current.get(keys[keys.length - 1]).getAsInt();
+    }
+
+    public static void setString(String path, String value) {
+        String[] keys = path.split("\\.");
+        JsonObject current = configJson;
+
+        for (int i = 0; i < keys.length - 1; i++) {
+            current = current.getAsJsonObject(keys[i]);
+        }
+
+        current.addProperty(keys[keys.length - 1], value);
+    }
+
+    public static void setInt(String path, int value) {
+        String[] keys = path.split("\\.");
+        JsonObject current = configJson;
+
+        for (int i = 0; i < keys.length - 1; i++) {
+            current = current.getAsJsonObject(keys[i]);
+        }
+
+        current.addProperty(keys[keys.length - 1], value);
+    }
+
+    public static void saveConfig() throws IOException {
+        String jsonString = gson.toJson(configJson);
+        Files.writeString(configPath, jsonString);
+        System.out.println("✅ Config guardado");
     }
 
 }
