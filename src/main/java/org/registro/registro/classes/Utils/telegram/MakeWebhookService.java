@@ -39,6 +39,7 @@ public class MakeWebhookService {
             payload.addProperty("turnoCount", turnos.size());
             payload.addProperty("isEmpty", turnos.isEmpty());
 
+
             return sendToWebhook(payload);
 
         } catch (Exception e) {

@@ -23,8 +23,6 @@ public class ConfigHandler {
     private static  Sistema sistema;
     private static Path path;
     private static String webhookUrl;
-    private static String chatId;
-    public static LocalTime webhookTime;
     private static Path pacientesPath;
     private static Path configPath;
     private static JsonObject  configJson;
@@ -51,8 +49,6 @@ public class ConfigHandler {
         configJson = JsonParser.parseString(json).getAsJsonObject();
 
         webhookUrl = getString("telegram.webhookUrl");
-        chatId = getString("telegram.chatId");
-        webhookTime = LocalTime.of(getInt("app.notificationHour"), getInt("app.notificationMinute"));
 
 
     }
@@ -135,35 +131,6 @@ public class ConfigHandler {
     public static void setWebhookUrl(String webhookUrl) throws IOException {
         ConfigHandler.webhookUrl = webhookUrl;
         ConfigHandler.setString("telegram.webhookUrl", webhookUrl);
-        ConfigHandler.saveConfig();
-    }
-
-    public static String getChatId() {
-        return chatId;
-    }
-
-    public static void setChatId(String chatId) throws IOException {
-        ConfigHandler.chatId = chatId;
-        ConfigHandler.setString("telegram.chatId", chatId);
-        ConfigHandler.saveConfig();
-    }
-
-    public static LocalTime getWebhookTime() {
-        return webhookTime;
-    }
-
-    public static void setWebhookTime(LocalTime webhookTime) throws IOException {
-        ConfigHandler.webhookTime = webhookTime;
-        ConfigHandler.setString("app.notificationHour", String.valueOf(webhookTime.getHour()));
-        ConfigHandler.setString("app.notificationMinute", String.valueOf(webhookTime.getMinute()));
-        ConfigHandler.saveConfig();
-
-    }
-
-    public static void setWebhookTime(int hour, int minute) throws IOException {
-        ConfigHandler.webhookTime = LocalTime.of(hour, minute);
-        ConfigHandler.setString("app.notificationHour", String.valueOf(hour));
-        ConfigHandler.setString("app.notificationMinute", String.valueOf(minute));
         ConfigHandler.saveConfig();
     }
 

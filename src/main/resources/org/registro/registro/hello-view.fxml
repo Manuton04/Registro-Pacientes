@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.registro.registro.MainController">
+<BorderPane prefHeight="500" prefWidth="768.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="org.registro.registro.MainController">
 
     <!-- Sidebar -->
     <left>
-        <VBox spacing="10" prefWidth="250" style="-fx-background-color: #2c3e50;">
+        <VBox prefWidth="250" spacing="10" style="-fx-background-color: #2c3e50;">
             <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
+                <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
 
-            <Button text="Agregar Paciente" maxWidth="Infinity"/>
+            <Button maxWidth="Infinity" text="Agregar Paciente" />
 
-            <TextField fx:id="buscador" promptText="Buscar paciente..." onKeyReleased="#onSearch"/>
+            <TextField fx:id="buscador" onKeyReleased="#onSearch" promptText="Buscar paciente..." />
 
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: #34495e;">
+            <ScrollPane fitToWidth="true" style="-fx-background: #34495e;" VBox.vgrow="ALWAYS">
                 <VBox fx:id="patientList" spacing="5">
                     <padding>
-                        <Insets top="5" right="5" bottom="5" left="5"/>
+                        <Insets bottom="5" left="5" right="5" top="5" />
                     </padding>
                 </VBox>
             </ScrollPane>
@@ -30,12 +30,9 @@
     <!-- Main content -->
     <center>
         <StackPane style="-fx-background-color: #ecf0f1;">
-            <Label text="Selecciona un paciente"/>
+            <Label text="Selecciona un paciente" />
         </StackPane>
-        <Button fx:id="btnEnviarTurnos"
-                text="📤 Enviar turnos de mañana"
-                onAction="#onEnviarTurnos"
-                maxWidth="Infinity" />
+        <Button fx:id="btnEnviarTurnos" maxWidth="Infinity" onAction="#onEnviarTurnos" text="Enviar turnos de mañana" />
     </center>
 
 </BorderPane>

@@ -1,10 +1,5 @@
 {
   "telegram": {
-    "webhookUrl": "https://hook.us1.make.com/YOUR_WEBHOOK_HERE",
-    "chatId": "-1001234567890"
-  },
-  "app": {
-    "notificationHour": 21,
-    "notificationMinute": 0
+    "webhookUrl": "https://hook.us1.make.com/YOUR_WEBHOOK_HERE"
   }
 }
