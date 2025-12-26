@@ -26,6 +26,8 @@ public class MainApplication extends Application {
         sistema = ConfigHandler.getSistema();
         TelegramIntegration.initialize();
 
+        //TelegramIntegration.webhookService.sendTomorrowsTurnosToMake();
+
         //sistema.addPaciente(crearPacientePrueba());
 
         System.out.println("Pacientes cargados:");

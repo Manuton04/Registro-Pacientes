@@ -21,7 +21,7 @@ public class TelegramIntegration {
 
     // ════════════════════════════════════════════════════════════════
 
-    private static MakeWebhookService webhookService;
+    public static MakeWebhookService webhookService;
 
     /**
      * Initialize the service (call this in your App or Controller init)
