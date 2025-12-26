@@ -1,0 +1,102 @@
+/* ===== GENERAL ===== */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.general-background {
+    -fx-background-color: #393e46;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    -fx-background-color: #222831;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.sidebar .top-padding {
+    -fx-background-color: #13161b;
+}
+
+/* ===== CONTENT AREA ===== */
+.content-area {
+    -fx-background-color: #393e46;
+}
+
+/* ===== BUTTONS ===== */
+
+/* Regular button */
+.button {
+    -fx-background-color: #142f41;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.button:pressed {
+    -fx-background-color: #1c5a85;
+}
+
+/* Patient list button */
+.patient-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 10 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.patient-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Circular Add Button (FAB) */
+.add-button {
+    -fx-background-color: #c0776e;
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-min-width: 50;
+    -fx-min-height: 50;
+    -fx-max-width: 50;
+    -fx-max-height: 50;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.add-button:hover {
+    -fx-background-color: #a65d54;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 8, 0, 0, 3);
+}
+
+.add-button:pressed {
+    -fx-background-color: #8b4a42;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+/* ===== TEXT FIELD (Search) ===== */
+.text-field {
+    -fx-background-color: #ecf0f1;
+    -fx-background-radius: 5;
+    -fx-padding: 8 12;
+    -fx-prompt-text-fill: #7f8c8d;
+}
+
+.text-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #3498db;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+}
+
+/* ===== TITLE ===== */
+.title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}

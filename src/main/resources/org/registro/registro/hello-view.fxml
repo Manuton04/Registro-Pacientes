@@ -1,38 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500" prefWidth="768.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="org.registro.registro.MainController">
-
-    <!-- Sidebar -->
-    <left>
-        <VBox prefWidth="250" spacing="10" style="-fx-background-color: #2c3e50;">
-            <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
-            </padding>
-
-            <Button maxWidth="Infinity" text="Agregar Paciente" />
-
-            <TextField fx:id="buscador" onKeyReleased="#onSearch" promptText="Buscar paciente..." />
-
-            <ScrollPane fitToWidth="true" style="-fx-background: #34495e;" VBox.vgrow="ALWAYS">
-                <VBox fx:id="patientList" spacing="5">
-                    <padding>
-                        <Insets bottom="5" left="5" right="5" top="5" />
-                    </padding>
-                </VBox>
-            </ScrollPane>
-        </VBox>
-    </left>
+<BorderPane prefHeight="500" prefWidth="768.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.registro.registro.MainController">
 
     <!-- Main content -->
     <center>
-        <StackPane style="-fx-background-color: #ecf0f1;">
-            <Label text="Selecciona un paciente" />
+        <StackPane style="-fx-background-color: #ecf0f1;" stylesheets="@styles.css">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="general-background" stylesheets="@styles.css">
+               <children>
+                  <TextField id="buscador" layoutX="14.0" layoutY="16.0" prefHeight="40.0" prefWidth="700.0" promptText="Escribe ..." stylesheets="@styles.css" text="Escribe ...">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </TextField>
+                  <VBox id="patientList" layoutX="14.0" layoutY="66.0" prefHeight="424.0" prefWidth="700.0" styleClass="sidebar" stylesheets="@styles.css" />
+               </children>
+            </Pane>
+         </children>
         </StackPane>
-        <Button fx:id="btnEnviarTurnos" maxWidth="Infinity" onAction="#onEnviarTurnos" text="Enviar turnos de mañana" />
     </center>
+   <left>
+      <Pane prefHeight="500.0" prefWidth="40.0" styleClass="sidebar" stylesheets="@styles.css" BorderPane.alignment="CENTER">
+         <children>
+            <Pane minWidth="-Infinity" prefHeight="16.0" prefWidth="40.0" styleClass="top-padding" stylesheets="@styles.css" />
+            <Button id="addPaciente" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="+">
+               <font>
+                  <Font size="1.0" />
+               </font>
+            </Button>
+            <Button id="pacientes" layoutY="56.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="p">
+               <font>
+                  <Font size="1.0" />
+               </font>
+            </Button>
+            <Button id="turnos" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="t">
+               <font>
+                  <Font size="1.0" />
+               </font>
+            </Button>
+            <Button id="openConfig" layoutY="459.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="config">
+               <font>
+                  <Font size="1.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </left>
 
 </BorderPane>

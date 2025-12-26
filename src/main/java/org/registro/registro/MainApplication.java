@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 import org.registro.registro.classes.ConfigHandler;
 import org.registro.registro.classes.Paciente;
 import org.registro.registro.classes.Sistema;
-import org.registro.registro.classes.Turno;
-import org.registro.registro.classes.Utils.condiciones.CondicionNombre;
 import org.registro.registro.classes.Utils.telegram.TelegramIntegration;
 
 import java.io.IOException;
@@ -18,10 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainApplication extends Application {
     private Sistema sistema = new Sistema();
@@ -78,6 +72,7 @@ public class MainApplication extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 1000, 600);
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         stage.setTitle("Registro de Pacientes");
         stage.setScene(scene);
         stage.show();
