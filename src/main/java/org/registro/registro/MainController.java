@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -23,7 +24,11 @@ public class MainController {
     private TextField buscador;
 
     @FXML
-    private VBox patientList;
+    private ScrollPane scroll;
+
+    @FXML
+    private VBox lista;
+    
     @FXML
     private Button btnEnviarTurnos;
 
@@ -33,6 +38,8 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        scroll.setContent(lista);
+        scroll.setFitToWidth(true);
         refreshPatientList();
     }
 
@@ -43,25 +50,24 @@ public class MainController {
     }
 
     public void refreshPatientList() {
-        patientList.getChildren().clear();
-        List<Paciente> lista = new ArrayList<>(sistema.getPacientes());
+        lista.getChildren().clear();
+
+        List<Paciente> pacientes = new ArrayList<>(sistema.getPacientes());
         if (getText() != null && !getText().isEmpty()) {
             Condicion condicion = ConfigHandler.getCondicionBuscador(getText());
-            lista = sistema.getPacientes(condicion);
-
+            pacientes = sistema.getPacientes(condicion);
         }
 
-
-        for (Paciente p : lista) {
-            Button patientBtn = new Button(p.getNombre()+" "+p.getApellido());
+        for (Paciente p : pacientes) {
+            Button patientBtn = new Button(p.getNombre() + " " + p.getApellido());
             patientBtn.setMaxWidth(Double.MAX_VALUE);
-            patientBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white;");
+            patientBtn.setStyle(".patient-button");
 
             patientBtn.setOnAction(e -> {
                 System.out.println("Selected: " + p.getNombre());
             });
 
-            patientList.getChildren().add(patientBtn);
+            lista.getChildren().add(patientBtn);
         }
     }
 

@@ -73,8 +73,10 @@ public class MainApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 1000, 600);
+        Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        stage.setMinHeight(500);
+        stage.setMinWidth(800);
         stage.setTitle("Registro de Pacientes");
         stage.setScene(scene);
         stage.show();

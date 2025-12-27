@@ -1,58 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500" prefWidth="768.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.registro.registro.MainController">
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.Region?>
+<BorderPane prefHeight="500" prefWidth="800.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.registro.registro.MainController">
 
     <!-- Main content -->
     <center>
-        <StackPane style="-fx-background-color: #ecf0f1;" stylesheets="@styles.css">
-         <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="general-background" stylesheets="@styles.css">
-               <children>
-                  <TextField id="buscador" layoutX="14.0" layoutY="16.0" prefHeight="40.0" prefWidth="700.0" promptText="Escribe ..." stylesheets="@styles.css" text="Escribe ...">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </TextField>
-                  <VBox id="patientList" layoutX="14.0" layoutY="66.0" prefHeight="424.0" prefWidth="700.0" styleClass="sidebar" stylesheets="@styles.css" />
-               </children>
-            </Pane>
-         </children>
-        </StackPane>
+       <StackPane style="-fx-background-color">
+          <VBox prefHeight="200.0" prefWidth="200.0" styleClass="general-background">
+             <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+             </padding>
+             <children>
+                <TextField fx:id="buscador" prefHeight="40.0" maxWidth="Infinity" promptText="Escribe ..."
+                           onKeyReleased="#onSearch">
+                   <font>
+                      <Font size="13.0"/>
+                   </font>
+                </TextField>
+                <ScrollPane fx:id="scroll" styleClass="scroll" prefHeight="420.0" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+                     <padding>
+                           <Insets top="10" right="10" bottom="10" left="10"/>
+                     </padding>
+                     <VBox fx:id="lista" spacing= "10" prefHeight="420.0" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+                </ScrollPane>
+             </children>
+          </VBox>
+       </StackPane>
     </center>
+
    <left>
-      <Pane prefHeight="500.0" prefWidth="40.0" styleClass="sidebar" stylesheets="@styles.css" BorderPane.alignment="CENTER">
-         <children>
-            <Pane minWidth="-Infinity" prefHeight="16.0" prefWidth="40.0" styleClass="top-padding" stylesheets="@styles.css" />
-            <Button id="addPaciente" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="+">
-               <font>
-                  <Font size="1.0" />
-               </font>
-            </Button>
-            <Button id="pacientes" layoutY="56.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="p">
-               <font>
-                  <Font size="1.0" />
-               </font>
-            </Button>
-            <Button id="turnos" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="t">
-               <font>
-                  <Font size="1.0" />
-               </font>
-            </Button>
-            <Button id="openConfig" layoutY="459.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" stylesheets="@styles.css" text="config">
-               <font>
-                  <Font size="1.0" />
-               </font>
-            </Button>
-         </children>
-      </Pane>
+      <VBox prefWidth="40.0" styleClass="sidebar" stylesheets="@styles.css" BorderPane.alignment="CENTER">
+
+         <VBox fx:id="addPaciente" styleClass="addPaciente-box" prefHeight="40.0" prefWidth="40.0" text="+"/>
+         <Button fx:id="pacientes" styleClass="button" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" text="p"/>
+         <Button fx:id="turnos" styleClass="button" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" text="t" />
+
+
+
+         <!-- Spacer pushes config to bottom -->
+         <Region VBox.vgrow="ALWAYS" />
+
+         <Button fx:id="openConfig" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" text="c"/>
+      </VBox>
    </left>
 
 </BorderPane>
